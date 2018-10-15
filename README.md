@@ -8,6 +8,4 @@ Lightweight web chat app.
 1. Open console in project directory
 2. Execute: `dotnet build`
 3. Execute: `dotnet run`
-
-## Swagger
-Open localhost:5000/swagger for auto-generated API documentation.
+4. Open `localhost:5000/swagger` for auto-generated API documentation.
