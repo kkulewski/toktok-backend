@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TokTok.Repositories;
 
 namespace TokTok
 {
@@ -18,6 +19,8 @@ namespace TokTok
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IMessageRepository, MockMessageRepository>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -28,16 +31,8 @@ namespace TokTok
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute("default", "{controller=ValuesController}/{action=Index}/{id?}");
-            });
+            
+            app.UseMvc();
         }
     }
 }
