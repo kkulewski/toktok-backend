@@ -2,7 +2,7 @@
 Lightweight web chat app.
 
 ## Prerequisites
-- .NET Core 2.1 runtime
+- [.NET Core 2.1 SDK](https://www.microsoft.com/net/download)
 
 ## Launch in local dev environment
 1. Open console in project directory
