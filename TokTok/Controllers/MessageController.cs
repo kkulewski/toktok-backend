@@ -5,7 +5,7 @@ using TokTok.Repositories;
 
 namespace TokTok.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class MessageController : ControllerBase
     {
