@@ -26,8 +26,12 @@ namespace TokTok
             // Swagger is used to auto-generate interactive API description.
             services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "TokTok API", Version = "v1" }));
 
-            // Use ASP.NET Core 2.1
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // Add minimal set of MVC features
+            services.AddMvcCore()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddDataAnnotations()
+                .AddJsonFormatters()
+                .AddApiExplorer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
