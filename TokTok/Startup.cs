@@ -31,7 +31,8 @@ namespace TokTok
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddDataAnnotations()
                 .AddJsonFormatters()
-                .AddApiExplorer();
+                .AddApiExplorer()
+                .AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +43,13 @@ namespace TokTok
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Enable CORS
+            app.UseCors(builder => builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowAnyOrigin()
+            );
 
             // Enable Swagger UI.
             app.UseSwagger();
