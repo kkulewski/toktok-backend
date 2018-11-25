@@ -23,6 +23,8 @@ namespace TokTok
             // Configure dependency injection container here.
             services.AddSingleton<IMessageRepository, MockMessageRepository>();
 
+            services.AddSingleton<IUserRepository, MockUserRepository>();
+
             // Swagger is used to auto-generate interactive API description.
             services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "TokTok API", Version = "v1" }));
 
