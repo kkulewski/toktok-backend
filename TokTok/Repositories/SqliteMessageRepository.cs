@@ -27,6 +27,7 @@ namespace TokTok.Repositories
 
         public void Create(Message message)
         {
+            message.Id = 0;
             _context.Messages.Add(message);
             Save();
         }
