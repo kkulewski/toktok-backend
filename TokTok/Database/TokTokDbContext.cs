@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TokTok.Models;
 
-namespace TokTok.Data
+namespace TokTok.Database
 {
-    public class TokTokDbContext : DbContext
+    public class SqliteDbContext : DbContext
     {
-        public TokTokDbContext()
+        public SqliteDbContext()
         {
         }
 
-        public TokTokDbContext(DbContextOptions<TokTokDbContext> options) : base(options)
+        public SqliteDbContext(DbContextOptions<SqliteDbContext> options) : base(options)
         {
         }
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
-using TokTok.Data;
+using TokTok.Database;
 using TokTok.Repositories;
 using TokTok.Repositories.Mock;
 using TokTok.Repositories.Sqlite;
@@ -31,7 +31,7 @@ namespace TokTok
             services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "TokTok API", Version = "v1" }));
 
             // Add DB context
-            services.AddDbContext<TokTokDbContext>();
+            services.AddDbContext<SqliteDbContext>();
             services.AddEntityFrameworkSqlite();
 
             // Add MVC features

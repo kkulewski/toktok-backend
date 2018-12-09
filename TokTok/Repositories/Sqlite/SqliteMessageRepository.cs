@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TokTok.Data;
+using TokTok.Database;
 using TokTok.Models;
 
 namespace TokTok.Repositories.Sqlite
 {
     public class SqliteMessageRepository : SqliteRepository, IMessageRepository
     {
-        public SqliteMessageRepository(TokTokDbContext context) : base(context)
+        public SqliteMessageRepository(SqliteDbContext context) : base(context)
         {
         }
 

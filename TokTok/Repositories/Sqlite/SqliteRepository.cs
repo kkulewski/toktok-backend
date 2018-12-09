@@ -1,12 +1,12 @@
-﻿using TokTok.Data;
+﻿using TokTok.Database;
 
 namespace TokTok.Repositories.Sqlite
 {
     public abstract class SqliteRepository
     {
-        protected readonly TokTokDbContext Context;
+        protected readonly SqliteDbContext Context;
 
-        protected SqliteRepository(TokTokDbContext context)
+        protected SqliteRepository(SqliteDbContext context)
         {
             Context = context;
         }
