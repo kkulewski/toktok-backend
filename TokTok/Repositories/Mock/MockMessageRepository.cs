@@ -2,7 +2,7 @@
 using System.Linq;
 using TokTok.Models;
 
-namespace TokTok.Repositories
+namespace TokTok.Repositories.Mock
 {
     public class MockMessageRepository : IMessageRepository
     {
