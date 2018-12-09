@@ -30,18 +30,26 @@ namespace TokTok.Repositories.Sqlite
 
         public void Update(int messageId, Message message)
         {
-            Context.Messages.Update(message);
+            var messageToUpdate = Context.Messages.Find(messageId);
+            if (messageToUpdate == null)
+            {
+                return;
+            }
+
+            messageToUpdate.Text = message.Text;
+            Context.Messages.Update(messageToUpdate);
             SaveChanges();
         }
 
         public void Delete(int messageId)
         {
             var messageToDelete = Get(messageId);
-            if (messageToDelete != null)
+            if (messageToDelete == null)
             {
-                Context.Messages.Remove(messageToDelete);
+                return;
             }
 
+            Context.Messages.Remove(messageToDelete);
             SaveChanges();
         }
     }

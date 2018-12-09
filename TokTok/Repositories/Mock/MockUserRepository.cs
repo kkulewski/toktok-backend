@@ -17,7 +17,11 @@ namespace TokTok.Repositories.Mock
         }
 
         public void Create(User newUser)
-        {   
+        {
+            // Basic version of incrementation
+            var userAmount = GetUsers().Count;
+            var id = GetUsers()[userAmount - 1].Id;
+            newUser.Id = ++id;
             _users.Add(newUser);
         }
 

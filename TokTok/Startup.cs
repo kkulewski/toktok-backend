@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using TokTok.Database;
 using TokTok.Repositories;
-using TokTok.Repositories.Mock;
 using TokTok.Repositories.Sqlite;
 
 namespace TokTok
@@ -25,14 +24,14 @@ namespace TokTok
         {
             // Configure dependency injection container here.
             services.AddTransient<IMessageRepository, SqliteMessageRepository>();
-            services.AddSingleton<IUserRepository, MockUserRepository>();
-
-            // Swagger is used to auto-generate interactive API description.
-            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "TokTok API", Version = "v1" }));
+            services.AddTransient<IUserRepository, SqliteUserRepository>();
 
             // Add DB context
             services.AddDbContext<SqliteDbContext>();
             services.AddEntityFrameworkSqlite();
+
+            // Swagger is used to auto-generate interactive API description.
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "TokTok API", Version = "v1" }));
 
             // Add MVC features
             services.AddMvc()
