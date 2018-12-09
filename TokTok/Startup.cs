@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using TokTok.Data;
 using TokTok.Repositories;
 
 namespace TokTok
@@ -21,20 +24,19 @@ namespace TokTok
         public void ConfigureServices(IServiceCollection services)
         {
             // Configure dependency injection container here.
-            services.AddSingleton<IMessageRepository, MockMessageRepository>();
-
+            services.AddTransient<IMessageRepository, SqliteMessageRepository>();
             services.AddSingleton<IUserRepository, MockUserRepository>();
 
             // Swagger is used to auto-generate interactive API description.
             services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info { Title = "TokTok API", Version = "v1" }));
 
-            // Add minimal set of MVC features
-            services.AddMvcCore()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddDataAnnotations()
-                .AddJsonFormatters()
-                .AddApiExplorer()
-                .AddCors();
+            // Add DB context
+            services.AddDbContext<TokTokDbContext>();
+            services.AddEntityFrameworkSqlite();
+
+            // Add MVC features
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
