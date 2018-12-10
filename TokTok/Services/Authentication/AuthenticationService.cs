@@ -22,7 +22,7 @@ namespace TokTok.Services.Authentication
 
             if (string.IsNullOrEmpty(user.Username) || user.Username.Length < 3 || user.Username.Length > 20)
             {
-                errors.Add("Invalid password.");
+                errors.Add("Invalid username.");
             }
 
             if (string.IsNullOrEmpty(user.Password) || user.Password.Length < 3 || user.Username.Length > 20)
