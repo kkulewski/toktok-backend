@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TokTok.Models;
 
-namespace TokTok.Repositories
+namespace TokTok.Repositories.Mock
 {
     public class MockUserRepository : IUserRepository
     {
@@ -18,7 +17,11 @@ namespace TokTok.Repositories
         }
 
         public void Create(User newUser)
-        {   
+        {
+            // Basic version of incrementation
+            var userAmount = GetUsers().Count;
+            var id = GetUsers()[userAmount - 1].Id;
+            newUser.Id = ++id;
             _users.Add(newUser);
         }
 

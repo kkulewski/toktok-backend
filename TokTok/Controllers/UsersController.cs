@@ -27,10 +27,6 @@ namespace TokTok.Controllers
         [HttpPost]
         public void Post([FromBody] User newUser)
         {
-            // Basic version of incrementation
-            var userAmount = _userRepository.GetUsers().Count;
-            var id = _userRepository.GetUsers()[userAmount - 1].Id;
-            newUser.Id = ++id;
             _userRepository.Create(newUser);
         }
     }
