@@ -30,9 +30,9 @@ namespace TokTok.Repositories.Mock
             throw new NotImplementedException();
         }
 
-        public User GetUser(int userId)
+        public User GetUser(Func<User, bool> condition)
         {
-            return _users.FirstOrDefault(usr => usr.Id == userId);
+            return _users.FirstOrDefault(condition);
         }
 
         public List<User> GetUsers()

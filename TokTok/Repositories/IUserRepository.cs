@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TokTok.Models;
 
 namespace TokTok.Repositories
@@ -7,7 +8,7 @@ namespace TokTok.Repositories
     {
         List<User> GetUsers();
 
-        User GetUser(int userId);
+        User GetUser(Func<User, bool> condition);
 
         void Create(User newUser);
 
