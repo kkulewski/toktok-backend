@@ -19,7 +19,6 @@ namespace TokTok.Controllers
             _authService = authService;
         }
 
-        // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<User>> Get()
         {
@@ -27,9 +26,17 @@ namespace TokTok.Controllers
         }
 
         [HttpPost]
-        public ActionResult<RegisterResult> Register([FromBody] User newUser)
+        [Route("[action]")]
+        public ActionResult<RegisterResult> Register([FromBody] User user)
         {
-            return Ok(_authService.Register(newUser));
+            return Ok(_authService.Register(user));
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public ActionResult<LoginResult> Login([FromBody] User user)
+        {
+            return Ok(_authService.Login(user));
         }
     }
 }

@@ -45,6 +45,40 @@ namespace TokTok.Services.Authentication
             return new RegisterResult(true, new List<string>());
         }
 
+        public LoginResult Login(User user)
+        {
+            var errors = new List<string>();
+
+            if (string.IsNullOrEmpty(user.Username) || user.Username.Length < 3 || user.Username.Length > 20)
+            {
+                errors.Add("Invalid username.");
+            }
+
+            if (string.IsNullOrEmpty(user.Password) || user.Password.Length < 3 || user.Username.Length > 20)
+            {
+                errors.Add("Invalid password.");
+            }
+
+            if (errors.Count > 0)
+            {
+                return new LoginResult(false, errors, string.Empty);
+            }
+
+            var matchingUser = _userRepository.GetUser(x => x.Username == user.Username);
+            if (matchingUser == null)
+            {
+                errors.Add("User does not exist.");
+                return new LoginResult(false, errors, string.Empty);
+            }
+            else if (HashPassword(user.Password) != matchingUser.Password)
+            {
+                errors.Add("Incorrect password.");
+                return new LoginResult(false, errors, string.Empty);
+            }
+
+            return new LoginResult(true, errors, matchingUser.Token);
+        }
+
         private string HashPassword(string password)
         {
             var sha1 = new SHA1CryptoServiceProvider();
