@@ -2,32 +2,41 @@
 using Microsoft.AspNetCore.Mvc;
 using TokTok.Models;
 using TokTok.Repositories;
+using TokTok.Services.Authentication;
 
 namespace TokTok.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UsersController
+    public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IAuthenticationService _authService;
 
-        public UsersController(IUserRepository userRepository)
+        public UsersController(IUserRepository userRepository, IAuthenticationService authService)
         {
             _userRepository = userRepository;
+            _authService = authService;
         }
 
-        // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<User>> Get()
         {
             return _userRepository.GetUsers();
         }
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody] User newUser)
+        [Route("[action]")]
+        public ActionResult<RegisterResult> Register([FromBody] User user)
         {
-            _userRepository.Create(newUser);
+            return Ok(_authService.Register(user));
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public ActionResult<LoginResult> Login([FromBody] User user)
+        {
+            return Ok(_authService.Login(user));
         }
     }
 }

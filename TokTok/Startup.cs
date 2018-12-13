@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using TokTok.Database;
 using TokTok.Repositories;
 using TokTok.Repositories.Sqlite;
+using TokTok.Services.Authentication;
 
 namespace TokTok
 {
@@ -25,6 +26,7 @@ namespace TokTok
             // Configure dependency injection container here.
             services.AddTransient<IMessageRepository, SqliteMessageRepository>();
             services.AddTransient<IUserRepository, SqliteUserRepository>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
 
             // Add DB context
             services.AddDbContext<SqliteDbContext>();

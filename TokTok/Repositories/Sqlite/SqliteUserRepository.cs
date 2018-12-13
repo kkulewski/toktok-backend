@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TokTok.Database;
 using TokTok.Models;
@@ -16,9 +17,9 @@ namespace TokTok.Repositories.Sqlite
             return Context.Users.ToList();
         }
 
-        public User GetUser(int userId)
+        public User GetUser(Func<User, bool> condition)
         {
-            return Context.Users.FirstOrDefault(x => x.Id == userId);
+            return Context.Users.FirstOrDefault(condition);
         }
 
         public void Create(User newUser)
