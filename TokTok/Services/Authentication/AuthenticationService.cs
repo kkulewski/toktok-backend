@@ -41,6 +41,7 @@ namespace TokTok.Services.Authentication
             }
 
             user.Password = HashPassword(user.Password);
+            user.Token = user.Username;
             _userRepository.Create(user);
             return new RegisterResult(true, new List<string>());
         }
