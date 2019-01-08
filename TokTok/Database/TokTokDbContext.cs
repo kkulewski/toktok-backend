@@ -5,6 +5,10 @@ namespace TokTok.Database
 {
     public class SqliteDbContext : DbContext
     {
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Channel> Channels { get; set; }
+
         public SqliteDbContext()
         {
         }
@@ -12,9 +16,6 @@ namespace TokTok.Database
         public SqliteDbContext(DbContextOptions<SqliteDbContext> options) : base(options)
         {
         }
-
-        public DbSet<Message> Messages { get; set; }
-        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
