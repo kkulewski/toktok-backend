@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TokTok.Models;
 
 namespace TokTok.Repositories
 {
     public interface IChannelRepository
     {
-        List<Channel> Get();
+        List<Channel> GetAll();
 
-        Channel Get(int channelId);
+        Channel Get(Func<Channel, bool> condition);
 
         void Create(Channel channnel);
 

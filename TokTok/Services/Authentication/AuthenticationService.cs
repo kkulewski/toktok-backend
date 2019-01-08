@@ -30,7 +30,7 @@ namespace TokTok.Services.Authentication
                 errors.Add("Invalid password.");
             }
 
-            if (_userRepository.GetUser(x => x.Username == user.Username) != null)
+            if (_userRepository.Get(x => x.Username == user.Username) != null)
             {
                 errors.Add("This username is already taken.");
             }
@@ -65,7 +65,7 @@ namespace TokTok.Services.Authentication
                 return new LoginResult(false, errors, string.Empty);
             }
 
-            var matchingUser = _userRepository.GetUser(x => x.Username == user.Username);
+            var matchingUser = _userRepository.Get(x => x.Username == user.Username);
             if (matchingUser == null)
             {
                 errors.Add("User does not exist.");

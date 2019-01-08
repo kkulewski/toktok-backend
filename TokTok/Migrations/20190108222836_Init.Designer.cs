@@ -9,8 +9,8 @@ using TokTok.Database;
 namespace TokTok.Migrations
 {
     [DbContext(typeof(SqliteDbContext))]
-    [Migration("20190108221600_Initial")]
-    partial class Initial
+    [Migration("20190108222836_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,8 +28,6 @@ namespace TokTok.Migrations
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Channels");
                 });
@@ -49,10 +47,6 @@ namespace TokTok.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChannelId");
-
-                    b.HasIndex("UserId");
-
                     b.ToTable("Messages");
                 });
 
@@ -70,27 +64,6 @@ namespace TokTok.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("TokTok.Models.Channel", b =>
-                {
-                    b.HasOne("TokTok.Models.User", "User")
-                        .WithMany("Channels")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TokTok.Models.Message", b =>
-                {
-                    b.HasOne("TokTok.Models.Channel", "Channel")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChannelId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("TokTok.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

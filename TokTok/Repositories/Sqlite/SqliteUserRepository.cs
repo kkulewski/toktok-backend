@@ -12,12 +12,12 @@ namespace TokTok.Repositories.Sqlite
         {
         }
 
-        public List<User> GetUsers()
+        public List<User> GetAll()
         {
             return Context.Users.ToList();
         }
 
-        public User GetUser(Func<User, bool> condition)
+        public User Get(Func<User, bool> condition)
         {
             return Context.Users.FirstOrDefault(condition);
         }

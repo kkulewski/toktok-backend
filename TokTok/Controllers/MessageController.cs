@@ -16,35 +16,30 @@ namespace TokTok.Controllers
             _messageRepository = messageRepository;
         }
 
-        // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<Message>> Get()
         {
-            return _messageRepository.Get();
+            return _messageRepository.GetAll();
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<Message> Get(int id)
         {
-            return _messageRepository.Get(id);
+            return _messageRepository.Get(x => x.Id == id);
         }
 
-        // POST api/values
         [HttpPost]
         public void Post([FromBody] Message message)
         {
             _messageRepository.Create(message);
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Message message)
         {
             _messageRepository.Update(id, message);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

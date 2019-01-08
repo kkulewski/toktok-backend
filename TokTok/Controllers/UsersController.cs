@@ -22,7 +22,7 @@ namespace TokTok.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<User>> Get()
         {
-            return _userRepository.GetUsers();
+            return _userRepository.GetAll();
         }
 
         [HttpPost]

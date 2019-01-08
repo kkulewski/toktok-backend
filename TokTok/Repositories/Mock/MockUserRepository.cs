@@ -19,8 +19,8 @@ namespace TokTok.Repositories.Mock
         public void Create(User newUser)
         {
             // Basic version of incrementation
-            var userAmount = GetUsers().Count;
-            var id = GetUsers()[userAmount - 1].Id;
+            var users = GetAll();
+            var id = users[users.Count - 1].Id;
             newUser.Id = ++id;
             _users.Add(newUser);
         }
@@ -30,12 +30,12 @@ namespace TokTok.Repositories.Mock
             throw new NotImplementedException();
         }
 
-        public User GetUser(Func<User, bool> condition)
+        public User Get(Func<User, bool> condition)
         {
             return _users.FirstOrDefault(condition);
         }
 
-        public List<User> GetUsers()
+        public List<User> GetAll()
         {
             return _users;
         }

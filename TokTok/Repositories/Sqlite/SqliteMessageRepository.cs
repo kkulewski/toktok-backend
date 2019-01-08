@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TokTok.Database;
 using TokTok.Models;
@@ -11,14 +12,14 @@ namespace TokTok.Repositories.Sqlite
         {
         }
 
-        public List<Message> Get()
+        public List<Message> GetAll()
         {
             return Context.Messages.ToList();
         }
 
-        public Message Get(int messageId)
+        public Message Get(Func<Message, bool> condition)
         {
-            return Context.Messages.FirstOrDefault(x => x.Id == messageId);
+            return Context.Messages.FirstOrDefault(condition);
         }
 
         public void Create(Message message)
@@ -43,7 +44,7 @@ namespace TokTok.Repositories.Sqlite
 
         public void Delete(int messageId)
         {
-            var messageToDelete = Get(messageId);
+            var messageToDelete = Get(x => x.Id == messageId);
             if (messageToDelete == null)
             {
                 return;
