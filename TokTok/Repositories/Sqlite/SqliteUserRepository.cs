@@ -24,7 +24,7 @@ namespace TokTok.Repositories.Sqlite
 
         public void Create(User newUser)
         {
-            if (Context.Users.FirstOrDefault(x => x.Username == newUser.Username) != null)
+            if (Context.Users.FirstOrDefault(x => x.UserName == newUser.UserName) != null)
             {
                 // another user with given username already exists
                 // this should return some kind of error message rather than void
@@ -45,14 +45,14 @@ namespace TokTok.Repositories.Sqlite
                 return;
             }
 
-            if (Context.Users.Count(x => x.Username == newUser.Username) > 1)
+            if (Context.Users.Count(x => x.UserName == newUser.UserName) > 1)
             {
                 // another user with given username already exists
                 return;
             }
 
             // copy new data
-            userToUpdate.Username = newUser.Username;
+            userToUpdate.UserName = newUser.UserName;
             userToUpdate.Password = newUser.Password;
             userToUpdate.Token = newUser.Token;
 

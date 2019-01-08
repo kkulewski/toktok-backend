@@ -8,12 +8,12 @@ namespace TokTok.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
         private readonly IAuthenticationService _authService;
 
-        public UsersController(IUserRepository userRepository, IAuthenticationService authService)
+        public UserController(IUserRepository userRepository, IAuthenticationService authService)
         {
             _userRepository = userRepository;
             _authService = authService;
@@ -23,6 +23,18 @@ namespace TokTok.Controllers
         public ActionResult<IEnumerable<User>> Get()
         {
             return _userRepository.GetAll();
+        }
+
+        [HttpGet("user/{token}")]
+        public ActionResult<User> GetUserByToken(string token)
+        {
+            return _userRepository.Get(x => x.Token == token);
+        }
+
+        [HttpGet("username/{id}")]
+        public ActionResult<string> GetUsernameById(int id)
+        {
+            return _userRepository.Get(x => x.Id == id).UserName;
         }
 
         [HttpPost]

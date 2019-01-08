@@ -12,7 +12,7 @@ namespace TokTok.Repositories.Mock
         public MockUserRepository()
         {
             _users = new List<User> {
-                new User { Username = "Mario", Password = "p@ssword" }
+                new User { UserName = "Mario", Password = "p@ssword" }
             };
         }
 
