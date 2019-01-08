@@ -9,8 +9,8 @@ using TokTok.Database;
 namespace TokTok.Migrations
 {
     [DbContext(typeof(SqliteDbContext))]
-    [Migration("20190108220413_AddChannel")]
-    partial class AddChannel
+    [Migration("20190108221600_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
