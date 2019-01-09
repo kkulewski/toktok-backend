@@ -37,6 +37,7 @@ namespace TokTok.Controllers
                 {
                     Id = msg.Id,
                     Text = msg.Text,
+                    SentDate = msg.SentDate,
                     UserName = users.FirstOrDefault(usr => usr.Id == msg.UserId)?.UserName ?? "NULL",
                     ChannelName = channels.FirstOrDefault(chn => chn.Id == msg.ChannelId)?.Name ?? "NULL"
                 })
