@@ -21,6 +21,8 @@ namespace TokTok.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Hidden");
+
                     b.Property<string>("Name");
 
                     b.Property<int>("UserId");
@@ -57,7 +59,7 @@ namespace TokTok.Migrations
 
                     b.Property<string>("Token");
 
-                    b.Property<string>("Username");
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 

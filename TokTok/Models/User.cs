@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
-
 namespace TokTok.Models
 {
     public class User : Entity

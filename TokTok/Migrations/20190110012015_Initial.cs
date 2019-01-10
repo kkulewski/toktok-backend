@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TokTok.Migrations
 {
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,8 @@ namespace TokTok.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
+                    Hidden = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,7 +44,7 @@ namespace TokTok.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Username = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     Token = table.Column<string>(nullable: true)
                 },

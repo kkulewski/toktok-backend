@@ -9,8 +9,8 @@ using TokTok.Database;
 namespace TokTok.Migrations
 {
     [DbContext(typeof(SqliteDbContext))]
-    [Migration("20190108222836_Init")]
-    partial class Init
+    [Migration("20190110012015_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,6 +22,8 @@ namespace TokTok.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Hidden");
 
                     b.Property<string>("Name");
 
@@ -59,7 +61,7 @@ namespace TokTok.Migrations
 
                     b.Property<string>("Token");
 
-                    b.Property<string>("Username");
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
