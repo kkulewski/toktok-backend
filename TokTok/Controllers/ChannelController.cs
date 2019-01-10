@@ -29,8 +29,10 @@ namespace TokTok.Controllers
             var channels = _channelRepository.GetAll();
 
             return channels
+                .Where(c => !c.Hidden)
                 .Select(ch => new ChannelDto
                 {
+                    Id = ch.Id,
                     Name = ch.Name,
                     UserName = users.FirstOrDefault(usr => usr.Id == ch.UserId)?.UserName ?? "NULL",
                 }).ToList();
@@ -52,16 +54,24 @@ namespace TokTok.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] ChannelDto channelDto)
+        public ActionResult Post([FromBody] ChannelDto channelDto)
         {
+            var channelAlreadyExists = _channelRepository.Get(x => x.Name == channelDto.Name) != null;
+            if (channelAlreadyExists)
+            {
+                return BadRequest();
+            }
+
             var channel = new Channel
             {
                 Id = 0,
                 Name = channelDto.Name,
                 UserId = _userRepository.Get(x => x.UserName == channelDto.UserName).Id,
+                Hidden = false
             };
 
             _channelRepository.Create(channel);
+            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -72,6 +82,7 @@ namespace TokTok.Controllers
                 Id = id,
                 Name = channelDto.Name,
                 UserId = _userRepository.Get(x => x.UserName == channelDto.UserName).Id,
+                Hidden = false
             };
 
             _channelRepository.Update(id, channel);
@@ -80,7 +91,12 @@ namespace TokTok.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            _channelRepository.Delete(id);
+            var channel = _channelRepository.Get(x => x.Id == id);
+            if (channel != null)
+            {
+                channel.Hidden = true;
+                _channelRepository.Update(id, channel);
+            }
         }
     }
 }
