@@ -156,14 +156,19 @@ namespace TokTok.Controllers
                 return new List<Channel>();
             }
 
-            var userAllowedChannelIds = _userInChannelRepository
+            var idsOfChannelsUserHasCreated = channels
+                .Where(x => x.UserId == user.Id)
+                .Select(x => x.Id);
+
+            var idsOfChannelsUserIsInvitedTo = _userInChannelRepository
                 .GetAll()
                 .Where(u => u.UserId == user.Id)
-                .Select(x => x.ChannelId)
-                .ToList();
+                .Select(x => x.ChannelId);
+
+            var allowedChannelIds = idsOfChannelsUserHasCreated.Intersect(idsOfChannelsUserIsInvitedTo);
 
             return channels
-                .Where(x => userAllowedChannelIds.Contains(x.Id))
+                .Where(x => allowedChannelIds.Contains(x.Id))
                 .ToList();
         }
     }
