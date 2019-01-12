@@ -27,6 +27,7 @@ namespace TokTok
             services.AddTransient<IMessageRepository, SqliteMessageRepository>();
             services.AddTransient<IUserRepository, SqliteUserRepository>();
             services.AddTransient<IChannelRepository, SqliteChannelRepository>();
+            services.AddTransient<IUserInChannelRepository, SqliteUserInChannelRepository>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
 
             // Add DB context
