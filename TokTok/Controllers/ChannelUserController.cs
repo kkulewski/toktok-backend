@@ -121,23 +121,11 @@ namespace TokTok.Controllers
             return Ok();
         }
 
-        [Route("invitations")]
+        [Route("invitations/{invitationId}")]
         [HttpDelete]
-        public ActionResult RemoveUserFromChannel([FromBody] UserInChannelDto userInChannelDto)
+        public ActionResult RemoveUserFromChannel(int invitationId)
         {
-            var user = _userRepository.Get(x => x.UserName == userInChannelDto.UserName);
-            if (user == null)
-            {
-                return BadRequest();
-            }
-
-            var channel = _channelRepository.Get(x => x.Name == userInChannelDto.ChannelName);
-            if (channel == null)
-            {
-                return BadRequest();
-            }
-
-            var mapping = _userInChannelRepository.Get(x => x.UserId == user.Id && x.ChannelId == channel.Id);
+            var mapping = _userInChannelRepository.Get(x => x.Id == invitationId);
             if (mapping == null)
             {
                 return BadRequest();
