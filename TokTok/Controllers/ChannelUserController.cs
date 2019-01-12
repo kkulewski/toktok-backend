@@ -152,7 +152,9 @@ namespace TokTok.Controllers
                 .Where(u => u.UserId == user.Id)
                 .Select(x => x.ChannelId);
 
-            var allowedChannelIds = idsOfChannelsUserHasCreated.Intersect(idsOfChannelsUserIsInvitedTo);
+            var allowedChannelIds = idsOfChannelsUserHasCreated
+                .Concat(idsOfChannelsUserIsInvitedTo)
+                .Distinct();
 
             return channels
                 .Where(x => allowedChannelIds.Contains(x.Id))
