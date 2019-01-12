@@ -28,12 +28,12 @@ namespace TokTok.Controllers
             _messageRepository = messageRepository;
         }
 
-        [Route("channels/{userId}")]
+        [Route("channels/{userName}")]
         [HttpGet]
-        public ActionResult<IEnumerable<ChannelDto>> GetAllowedChannels(int userId)
+        public ActionResult<IEnumerable<ChannelDto>> GetAllowedChannels(string userName)
         {
             var users = _userRepository.GetAll();
-            var userAllowedChannels = GetAllowedChannelsForGivenUserId(userId);
+            var userAllowedChannels = GetAllowedChannelsForGivenUserName(userName);
 
             return userAllowedChannels
                 .Where(c => !c.Hidden)
@@ -45,13 +45,13 @@ namespace TokTok.Controllers
                 }).ToList();
         }
 
-        [Route("messages/{userId}")]
+        [Route("messages/{userName}")]
         [HttpGet]
-        public ActionResult<IEnumerable<MessageDto>> GetAllowedChannelsMessages(int userId)
+        public ActionResult<IEnumerable<MessageDto>> GetAllowedChannelsMessages(string userName)
         {
             var messages = _messageRepository.GetAll();
             var users = _userRepository.GetAll();
-            var channels = GetAllowedChannelsForGivenUserId(userId);
+            var channels = GetAllowedChannelsForGivenUserName(userName);
 
             var messageDtos = messages
                 .Select(msg => new MessageDto
@@ -147,13 +147,18 @@ namespace TokTok.Controllers
             return Ok();
         }
 
-        private List<Channel> GetAllowedChannelsForGivenUserId(int userId)
+        private List<Channel> GetAllowedChannelsForGivenUserName(string userName)
         {
             var channels = _channelRepository.GetAll();
+            var user = _userRepository.Get(x => x.UserName == userName);
+            if (user == null)
+            {
+                return new List<Channel>();
+            }
 
             var userAllowedChannelIds = _userInChannelRepository
                 .GetAll()
-                .Where(u => u.UserId == userId)
+                .Where(u => u.UserId == user.Id)
                 .Select(x => x.ChannelId)
                 .ToList();
 
