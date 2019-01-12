@@ -39,6 +39,20 @@ namespace TokTok.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserInChannels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(nullable: false),
+                    ChannelId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserInChannels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -61,6 +75,9 @@ namespace TokTok.Migrations
 
             migrationBuilder.DropTable(
                 name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "UserInChannels");
 
             migrationBuilder.DropTable(
                 name: "Users");

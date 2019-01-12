@@ -9,7 +9,7 @@ using TokTok.Database;
 namespace TokTok.Migrations
 {
     [DbContext(typeof(SqliteDbContext))]
-    [Migration("20190110012015_Initial")]
+    [Migration("20190112221643_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,20 @@ namespace TokTok.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TokTok.Models.UserInChannel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ChannelId");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserInChannels");
                 });
 #pragma warning restore 612, 618
         }

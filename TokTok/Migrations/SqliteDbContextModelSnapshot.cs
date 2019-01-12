@@ -65,6 +65,20 @@ namespace TokTok.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("TokTok.Models.UserInChannel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ChannelId");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserInChannels");
+                });
 #pragma warning restore 612, 618
         }
     }
