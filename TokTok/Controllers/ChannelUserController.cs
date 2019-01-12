@@ -7,7 +7,6 @@ using TokTok.Repositories;
 
 namespace TokTok.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
     public class ChannelUserController : ControllerBase
     {
