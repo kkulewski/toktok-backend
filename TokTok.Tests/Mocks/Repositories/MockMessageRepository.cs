@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using TokTok.Models;
+using TokTok.Repositories;
 
-namespace TokTok.Repositories.Mock
+namespace TokTok.Tests.Mocks.Repositories
 {
     public class MockMessageRepository : IMessageRepository
     {
