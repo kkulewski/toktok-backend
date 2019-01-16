@@ -40,8 +40,8 @@ namespace TokTok.Services.Authentication
                 return new RegisterResult(false, errors);
             }
 
-            user.Password = HashPassword(user.Password);
-            user.Token = user.UserName;
+            user.Password = HashString(user.Password);
+            user.Token = HashString(user.UserName);
             _userRepository.Create(user);
             return new RegisterResult(true, new List<string>());
         }
@@ -62,29 +62,29 @@ namespace TokTok.Services.Authentication
 
             if (errors.Count > 0)
             {
-                return new LoginResult(false, errors, string.Empty);
+                return new LoginResult(false, errors, string.Empty, string.Empty);
             }
 
             var matchingUser = _userRepository.Get(x => x.UserName == user.UserName);
             if (matchingUser == null)
             {
                 errors.Add("User does not exist.");
-                return new LoginResult(false, errors, string.Empty);
+                return new LoginResult(false, errors, string.Empty, string.Empty);
             }
-            else if (HashPassword(user.Password) != matchingUser.Password)
+            else if (HashString(user.Password) != matchingUser.Password)
             {
                 errors.Add("Incorrect password.");
-                return new LoginResult(false, errors, string.Empty);
+                return new LoginResult(false, errors, string.Empty, string.Empty);
             }
 
-            return new LoginResult(true, errors, matchingUser.Token);
+            return new LoginResult(true, errors, matchingUser.Token, matchingUser.UserName);
         }
 
-        private string HashPassword(string password)
+        private string HashString(string text)
         {
             var sha1 = new SHA1CryptoServiceProvider();
-            var passwordHash = sha1.ComputeHash(Encoding.ASCII.GetBytes(password));
-            return Convert.ToBase64String(passwordHash);
+            var textHash = sha1.ComputeHash(Encoding.ASCII.GetBytes(text));
+            return Convert.ToBase64String(textHash);
         }
     }
 }

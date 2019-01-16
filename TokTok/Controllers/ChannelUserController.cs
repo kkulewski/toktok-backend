@@ -7,32 +7,35 @@ using TokTok.Repositories;
 
 namespace TokTok.Controllers
 {
-    [ApiController]
-    public class ChannelUserController : ControllerBase
+    public class ChannelUserController : AuthenticatedController
     {
         private readonly IChannelRepository _channelRepository;
         private readonly IUserInChannelRepository _userInChannelRepository;
         private readonly IMessageRepository _messageRepository;
-        private readonly IUserRepository _userRepository;
 
         public ChannelUserController(
             IChannelRepository channelRepository,
             IUserInChannelRepository userInChannelRepository,
             IMessageRepository messageRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository) : base(userRepository)
         {
             _channelRepository = channelRepository;
             _userInChannelRepository = userInChannelRepository;
-            _userRepository = userRepository;
             _messageRepository = messageRepository;
         }
 
-        [Route("channels/{userName}")]
+        [Route("channels")]
         [HttpGet]
-        public ActionResult<IEnumerable<ChannelDto>> GetAllowedChannels(string userName)
+        public ActionResult<IEnumerable<ChannelDto>> GetAllowedChannels()
         {
-            var users = _userRepository.GetAll();
-            var userAllowedChannels = GetAllowedChannelsForGivenUserName(userName);
+            var user = CurrentUser;
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var userAllowedChannels = GetAllowedChannelsForGivenUser(user);
+            var users = UserRepository.GetAll();
 
             return userAllowedChannels
                 .Where(c => !c.Hidden)
@@ -44,13 +47,19 @@ namespace TokTok.Controllers
                 }).ToList();
         }
 
-        [Route("messages/{userName}")]
+        [Route("messages")]
         [HttpGet]
-        public ActionResult<IEnumerable<MessageDto>> GetAllowedChannelsMessages(string userName)
+        public ActionResult<IEnumerable<MessageDto>> GetAllowedChannelsMessages()
         {
+            var user = CurrentUser;
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
             var messages = _messageRepository.GetAll();
-            var users = _userRepository.GetAll();
-            var channels = GetAllowedChannelsForGivenUserName(userName);
+            var users = UserRepository.GetAll();
+            var channels = GetAllowedChannelsForGivenUser(user);
 
             var messageDtos = messages
                 .Select(msg => new MessageDto
@@ -71,7 +80,7 @@ namespace TokTok.Controllers
         public ActionResult<IEnumerable<UserInChannelDto>> UsersInChannel(int channelId)
         {
             var channels = _channelRepository.GetAll();
-            var users = _userRepository.GetAll();
+            var users = UserRepository.GetAll();
 
             var usersInChannel = _userInChannelRepository
                 .GetAll()
@@ -91,10 +100,10 @@ namespace TokTok.Controllers
         [HttpPost]
         public ActionResult AddUserToChannel([FromBody] UserInChannelDto userInChannelDto)
         {
-            var user = _userRepository.Get(x => x.UserName == userInChannelDto.UserName);
+            var user = UserRepository.Get(x => x.UserName == userInChannelDto.UserName);
             if (user == null)
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
             var channel = _channelRepository.Get(x => x.Name == userInChannelDto.ChannelName);
@@ -134,14 +143,14 @@ namespace TokTok.Controllers
             return Ok();
         }
 
-        private List<Channel> GetAllowedChannelsForGivenUserName(string userName)
+        private List<Channel> GetAllowedChannelsForGivenUser(User user)
         {
-            var channels = _channelRepository.GetAll();
-            var user = _userRepository.Get(x => x.UserName == userName);
             if (user == null)
             {
                 return new List<Channel>();
             }
+
+            var channels = _channelRepository.GetAll();
 
             var idsOfChannelsUserHasCreated = channels
                 .Where(x => x.UserId == user.Id)

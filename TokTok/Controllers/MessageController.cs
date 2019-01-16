@@ -8,20 +8,17 @@ using TokTok.Repositories;
 namespace TokTok.Controllers
 {
     [Route("[controller]")]
-    [ApiController]
-    public class MessageController : ControllerBase
+    public class MessageController : AuthenticatedController
     {
         private readonly IMessageRepository _messageRepository;
-        private readonly IUserRepository _userRepository;
         private readonly IChannelRepository _channelRepository;
 
         public MessageController(
             IMessageRepository messageRepository,
             IUserRepository userRepository,
-            IChannelRepository channelRepository)
+            IChannelRepository channelRepository) : base(userRepository)
         {
             _messageRepository = messageRepository;
-            _userRepository = userRepository;
             _channelRepository = channelRepository;
         }
 
@@ -29,7 +26,7 @@ namespace TokTok.Controllers
         public ActionResult<IEnumerable<MessageDto>> Get()
         {
             var messages = _messageRepository.GetAll();
-            var users = _userRepository.GetAll();
+            var users = UserRepository.GetAll();
             var channels = _channelRepository.GetAll();
 
             var messageDtos = messages
@@ -56,7 +53,7 @@ namespace TokTok.Controllers
                 Id = message.Id,
                 Text = message.Text,
                 SentDate = message.SentDate,
-                UserName = _userRepository.Get(x => x.Id == message.UserId).UserName,
+                UserName = UserRepository.Get(x => x.Id == message.UserId).UserName,
                 ChannelName = _channelRepository.Get(x => x.Id == message.ChannelId).Name
             };
 
@@ -64,39 +61,79 @@ namespace TokTok.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] MessageDto messageDto)
+        public ActionResult Post([FromBody] MessageDto messageDto)
         {
+            if (CurrentUser == null)
+            {
+                return BadRequest();
+            }
+
             var message = new Message
             {
                 Id = 0,
                 Text = messageDto.Text,
                 SentDate = messageDto.SentDate,
-                UserId = _userRepository.Get(x => x.UserName == messageDto.UserName).Id,
+                UserId = CurrentUser.Id,
                 ChannelId = _channelRepository.Get(x => x.Name == messageDto.ChannelName).Id
             };
 
             _messageRepository.Create(message);
+            return Ok();
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] MessageDto messageDto)
+        public ActionResult Put(int id, [FromBody] MessageDto messageDto)
         {
+            if (CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var oldMessage = _messageRepository.Get(x => x.Id == id);
+            if (oldMessage == null)
+            {
+                return BadRequest();
+            }
+
+            if (oldMessage.UserId != CurrentUser.Id)
+            {
+                return Forbid();
+            }
+
             var message = new Message
             {
                 Id = id,
                 Text = messageDto.Text,
                 SentDate = messageDto.SentDate,
-                UserId = _userRepository.Get(x => x.UserName == messageDto.UserName).Id,
+                UserId = CurrentUser.Id,
                 ChannelId = _channelRepository.Get(x => x.Name == messageDto.ChannelName).Id
             };
 
             _messageRepository.Update(id, message);
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
+            if (CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var message = _messageRepository.Get(x => x.Id == id);
+            if (message == null)
+            {
+                return BadRequest();
+            }
+
+            if (message.UserId != CurrentUser.Id)
+            {
+                return Forbid();
+            }
+
             _messageRepository.Delete(id);
+            return Ok();
         }
     }
 }

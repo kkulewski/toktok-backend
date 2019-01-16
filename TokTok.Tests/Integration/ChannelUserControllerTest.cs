@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using TokTok.Controllers;
 using TokTok.Models;
@@ -29,9 +31,9 @@ namespace TokTok.Tests.Integration
 
             _exampleUsers = new List<User>
             {
-                new User {Id = 1, UserName = "user1"},
-                new User {Id = 2, UserName = "user2"},
-                new User {Id = 3, UserName = "user3"}
+                new User {Id = 1, UserName = "user1", Token = "token1" },
+                new User {Id = 2, UserName = "user2", Token = "token2" },
+                new User {Id = 3, UserName = "user3", Token = "token3" }
             };
 
             _exampleChannels = new List<Channel>
@@ -78,11 +80,12 @@ namespace TokTok.Tests.Integration
                 _channelRepositoryMock.Object,
                 _userInChannelRepositoryMock.Object,
                 _messageRepositoryMock.Object,
-                _userRepositoryMock.Object);
+                _userRepositoryMock.Object) { ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() } };
+            controller.ControllerContext.HttpContext.Request.Headers["Authorize"] = "token1";
 
             // Act
             var result = controller
-                .GetAllowedChannels("user1")
+                .GetAllowedChannels()
                 .Value
                 .ToList();
 
@@ -117,11 +120,13 @@ namespace TokTok.Tests.Integration
                 _channelRepositoryMock.Object,
                 _userInChannelRepositoryMock.Object,
                 _messageRepositoryMock.Object,
-                _userRepositoryMock.Object);
+                _userRepositoryMock.Object) { ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() } };
+            controller.ControllerContext.HttpContext.Request.Headers["Authorize"] = "token1";
+
 
             // Act
             var result = controller
-                .GetAllowedChannels("user1")
+                .GetAllowedChannels()
                 .Value
                 .ToList();
 

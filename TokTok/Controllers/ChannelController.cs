@@ -8,24 +8,21 @@ using TokTok.Repositories;
 namespace TokTok.Controllers
 {
     [Route("[controller]")]
-    [ApiController]
-    public class ChannelController : ControllerBase
+    public class ChannelController : AuthenticatedController
     {
         private readonly IChannelRepository _channelRepository;
-        private readonly IUserRepository _userRepository;
 
         public ChannelController(
             IChannelRepository channelRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository) : base(userRepository)
         {
             _channelRepository = channelRepository;
-            _userRepository = userRepository;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<ChannelDto>> Get()
         {
-            var users = _userRepository.GetAll();
+            var users = UserRepository.GetAll();
             var channels = _channelRepository.GetAll();
 
             return channels
@@ -47,7 +44,7 @@ namespace TokTok.Controllers
             {
                 Id = channel.Id,
                 Name = channel.Name,
-                UserName = _userRepository.Get(x => x.Id == channel.UserId).UserName
+                UserName = UserRepository.Get(x => x.Id == channel.UserId).UserName
             };
 
             return channelDto;
@@ -56,6 +53,11 @@ namespace TokTok.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] ChannelDto channelDto)
         {
+            if (CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+
             var channelAlreadyExists = _channelRepository.Get(x => x.Name == channelDto.Name) != null;
             if (channelAlreadyExists)
             {
@@ -66,7 +68,7 @@ namespace TokTok.Controllers
             {
                 Id = 0,
                 Name = channelDto.Name,
-                UserId = _userRepository.Get(x => x.UserName == channelDto.UserName).Id,
+                UserId = CurrentUser.Id,
                 Hidden = false
             };
 
@@ -75,28 +77,58 @@ namespace TokTok.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] ChannelDto channelDto)
+        public ActionResult Put(int id, [FromBody] ChannelDto channelDto)
         {
+            if (CurrentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var oldChannel = _channelRepository.Get(x => x.Id == id);
+            if (oldChannel == null)
+            {
+                return BadRequest();
+            }
+
+            if (oldChannel.UserId != CurrentUser.Id)
+            {
+                return Forbid();
+            }
+
             var channel = new Channel
             {
                 Id = id,
                 Name = channelDto.Name,
-                UserId = _userRepository.Get(x => x.UserName == channelDto.UserName).Id,
+                UserId = CurrentUser.Id,
                 Hidden = false
             };
 
             _channelRepository.Update(id, channel);
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var channel = _channelRepository.Get(x => x.Id == id);
-            if (channel != null)
+            if (CurrentUser == null)
             {
-                channel.Hidden = true;
-                _channelRepository.Update(id, channel);
+                return Unauthorized();
             }
+
+            var channel = _channelRepository.Get(x => x.Id == id);
+            if (channel == null)
+            {
+                return BadRequest();
+            }
+
+            if (channel.UserId != CurrentUser.Id)
+            {
+                return Forbid();
+            }
+
+            channel.Hidden = true;
+            _channelRepository.Update(id, channel);
+            return Ok();
         }
     }
 }
