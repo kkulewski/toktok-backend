@@ -6,9 +6,9 @@ namespace TokTok.Repositories
 {
     public interface IUserRepository
     {
-        List<User> GetUsers();
+        List<User> GetAll();
 
-        User GetUser(Func<User, bool> condition);
+        User Get(Func<User, bool> condition);
 
         void Create(User newUser);
 

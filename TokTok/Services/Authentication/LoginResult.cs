@@ -7,12 +7,14 @@ namespace TokTok.Services.Authentication
         public bool Success { get; }
         public List<string> Errors { get; }
         public string Token { get; }
+        public string UserName { get; }
 
-        public LoginResult(bool isSuccess, List<string> errors, string token)
+        public LoginResult(bool isSuccess, List<string> errors, string token, string userName)
         {
             Success = isSuccess;
             Errors = errors;
             Token = token;
+            UserName = userName;
         }
     }
 }

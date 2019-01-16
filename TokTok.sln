@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokTok", "TokTok\TokTok.csproj", "{02424FD1-E7A8-4BDE-8178-E45489D62A11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokTok.Tests", "TokTok.Tests\TokTok.Tests.csproj", "{DD7345C1-6CE5-4EA7-A4FC-3018796D72FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{02424FD1-E7A8-4BDE-8178-E45489D62A11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02424FD1-E7A8-4BDE-8178-E45489D62A11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02424FD1-E7A8-4BDE-8178-E45489D62A11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD7345C1-6CE5-4EA7-A4FC-3018796D72FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD7345C1-6CE5-4EA7-A4FC-3018796D72FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD7345C1-6CE5-4EA7-A4FC-3018796D72FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD7345C1-6CE5-4EA7-A4FC-3018796D72FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

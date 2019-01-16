@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TokTok.Models;
+using TokTok.Repositories;
 
-namespace TokTok.Repositories.Mock
+namespace TokTok.Tests.Mocks.Repositories
 {
     public class MockMessageRepository : IMessageRepository
     {
@@ -18,14 +20,14 @@ namespace TokTok.Repositories.Mock
             };
         }
 
-        public List<Message> Get()
+        public List<Message> GetAll()
         {
             return _messages;
         }
 
-        public Message Get(int messageId)
+        public Message Get(Func<Message, bool> condition)
         {
-            return _messages.FirstOrDefault(msg => msg.Id == messageId);
+            return _messages.FirstOrDefault(condition);
         }
 
         public void Create(Message message)
@@ -35,7 +37,7 @@ namespace TokTok.Repositories.Mock
 
         public void Update(int messageId, Message newMessage)
         {
-            var oldMessage = Get(messageId);
+            var oldMessage = Get(x => x.Id == messageId);
             if (oldMessage != null)
             {
                 _messages.Remove(oldMessage);
@@ -45,7 +47,7 @@ namespace TokTok.Repositories.Mock
 
         public void Delete(int messageId)
         {
-            var messageToDelete = Get(messageId);
+            var messageToDelete = Get(x => x.Id == messageId);
             if (messageToDelete != null)
             {
                 _messages.Remove(messageToDelete);

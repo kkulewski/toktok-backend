@@ -7,22 +7,31 @@ using TokTok.Services.Authentication;
 namespace TokTok.Controllers
 {
     [Route("[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : AuthenticatedController
     {
-        private readonly IUserRepository _userRepository;
         private readonly IAuthenticationService _authService;
 
-        public UsersController(IUserRepository userRepository, IAuthenticationService authService)
+        public UserController(IUserRepository userRepository, IAuthenticationService authService) : base(userRepository)
         {
-            _userRepository = userRepository;
             _authService = authService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<User>> Get()
         {
-            return _userRepository.GetUsers();
+            return UserRepository.GetAll();
+        }
+
+        [HttpGet("token/{token}")]
+        public ActionResult<User> GetUserByToken(string token)
+        {
+            return UserRepository.Get(x => x.Token == token);
+        }
+
+        [HttpGet("name/{id}")]
+        public ActionResult<string> GetUsernameById(int id)
+        {
+            return UserRepository.Get(x => x.Id == id).UserName;
         }
 
         [HttpPost]
