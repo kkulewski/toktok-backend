@@ -49,7 +49,9 @@ namespace TokTok.Tests.Integration
             _exampleUserInChannels = new List<UserInChannel>
             {
                 new UserInChannel {Id = 1, ChannelId = 3, UserId = 1},
-                new UserInChannel {Id = 2, ChannelId = 5, UserId = 1}
+                new UserInChannel {Id = 2, ChannelId = 5, UserId = 1},
+                new UserInChannel {Id = 3, ChannelId = 5, UserId = 2},
+                new UserInChannel {Id = 4, ChannelId = 5, UserId = 3}
             };
 
             _exampleMessage = new List<Message>
@@ -190,6 +192,47 @@ namespace TokTok.Tests.Integration
             Assert.Equal(6, result.Count);
             Assert.Contains(result, message => message.Text == "message1");
   
+        }
+
+        [Fact]
+        public void UsersInChannel_ReturnsUsers()
+        {
+            // Arrange
+            var testUser = _exampleUsers
+                .First();
+
+            _userRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleUsers);
+
+            _userRepositoryMock
+                .Setup(x => x.Get(It.IsAny<Func<User, bool>>()))
+                .Returns(testUser);
+
+            _channelRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleChannels);
+
+            _userInChannelRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleUserInChannels);
+
+            var controller = new ChannelUserController(
+                _channelRepositoryMock.Object,
+                _userInChannelRepositoryMock.Object,
+                _messageRepositoryMock.Object,
+                _userRepositoryMock.Object)
+            { ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() } };
+            controller.ControllerContext.HttpContext.Request.Headers["Authorize"] = "token1";
+
+            // Act
+            var result = controller
+                .UsersInChannel(5)
+                .Value
+                .ToList();
+
+            Assert.Equal(3, result.Count);
+
         }
 
 
