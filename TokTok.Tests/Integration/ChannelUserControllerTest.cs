@@ -151,29 +151,7 @@ namespace TokTok.Tests.Integration
         [Fact]
         public void GetAllowedChannelsMesseges_ReturnsMessages()
         {
-            // Arrange
-            var testUser = _exampleUsers
-                .First();
-
-            _userRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleUsers);
-
-            _userRepositoryMock
-                .Setup(x => x.Get(It.IsAny<Func<User, bool>>()))
-                .Returns(testUser);
-
-            _channelRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleChannels);
-
-            _userInChannelRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleUserInChannels);
-
-            _messageRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleMessage);
+            setMocks();
 
             var controller = new ChannelUserController(
                 _channelRepositoryMock.Object,
@@ -194,28 +172,12 @@ namespace TokTok.Tests.Integration
   
         }
 
+
         [Fact]
         public void UsersInChannel_ReturnsUsers()
         {
             // Arrange
-            var testUser = _exampleUsers
-                .First();
-
-            _userRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleUsers);
-
-            _userRepositoryMock
-                .Setup(x => x.Get(It.IsAny<Func<User, bool>>()))
-                .Returns(testUser);
-
-            _channelRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleChannels);
-
-            _userInChannelRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleUserInChannels);
+            setMocks();
 
             var controller = new ChannelUserController(
                 _channelRepositoryMock.Object,
@@ -235,6 +197,28 @@ namespace TokTok.Tests.Integration
 
         }
 
+        [Fact]
+        public void setMocks()
+        {
+            var testUser = _exampleUsers
+            .First();
+
+            _userRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleUsers);
+
+            _userRepositoryMock
+                .Setup(x => x.Get(It.IsAny<Func<User, bool>>()))
+                .Returns(testUser);
+
+            _channelRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleChannels);
+
+            _userInChannelRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleUserInChannels);
+        }
 
     }
 }
