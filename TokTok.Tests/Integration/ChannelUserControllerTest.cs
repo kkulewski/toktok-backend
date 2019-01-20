@@ -66,29 +66,11 @@ namespace TokTok.Tests.Integration
             };
         }
 
-
         [Fact]
         public void GetAllowedChannels_ReturnsExpectedNumberOfChannels()
         {
             // Arrange
-            var testUser = _exampleUsers
-                .First();
-
-            _userRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleUsers);
-
-            _userRepositoryMock
-                .Setup(x => x.Get(It.IsAny<Func<User, bool>>()))
-                .Returns(testUser);
-
-            _channelRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleChannels);
-
-            _userInChannelRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleUserInChannels);
+            SetMocks();
 
             var controller = new ChannelUserController(
                 _channelRepositoryMock.Object,
@@ -111,24 +93,7 @@ namespace TokTok.Tests.Integration
         public void GetAllowedChannels_ReturnsChannels_IncludingTheseCreatedByUser()
         {
             // Arrange
-            var testUser = _exampleUsers
-                .First();
-
-            _userRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleUsers);
-
-            _userRepositoryMock
-                .Setup(x => x.Get(It.IsAny<Func<User, bool>>()))
-                .Returns(testUser);
-
-            _channelRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleChannels);
-
-            _userInChannelRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(_exampleUserInChannels);
+            SetMocks();
 
             var controller = new ChannelUserController(
                 _channelRepositoryMock.Object,
@@ -136,7 +101,6 @@ namespace TokTok.Tests.Integration
                 _messageRepositoryMock.Object,
                 _userRepositoryMock.Object) { ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() } };
             controller.ControllerContext.HttpContext.Request.Headers["Authorize"] = "token1";
-
 
             // Act
             var result = controller
@@ -151,7 +115,7 @@ namespace TokTok.Tests.Integration
         [Fact]
         public void GetAllowedChannelsMesseges_ReturnsMessages()
         {
-            setMocks();
+            SetMocks();
 
             var controller = new ChannelUserController(
                 _channelRepositoryMock.Object,
@@ -167,17 +131,16 @@ namespace TokTok.Tests.Integration
                 .Value
                 .ToList();
 
-            Assert.Equal(0, result.Count);
-           // Assert.Contains(result, message => message.Text == "message1");
+            Assert.Equal(6, result.Count);
+            Assert.Contains(result, message => message.Text == "message1");
   
         }
-
 
         [Fact]
         public void UsersInChannel_ReturnsUsers()
         {
             // Arrange
-            setMocks();
+            SetMocks();
 
             var controller = new ChannelUserController(
                 _channelRepositoryMock.Object,
@@ -197,31 +160,7 @@ namespace TokTok.Tests.Integration
 
         }
 
-        [Fact]
-        public void UsersInChannefl_ReturnsUsers()
-        {
-            // Arrange
-            setMocks();
-
-            var controller = new ChannelUserController(
-                _channelRepositoryMock.Object,
-                _userInChannelRepositoryMock.Object,
-                _messageRepositoryMock.Object,
-                _userRepositoryMock.Object)
-            { ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() } };
-            controller.ControllerContext.HttpContext.Request.Headers["Authorize"] = "token1";
-
-            // Act
-            //var result = controller.AddUserToChannel(_use)
-
-           // Assert.Equal(3, result.Count);
-
-        }
-
-
-
-        [Fact]
-        public void setMocks()
+        private void SetMocks()
         {
             var testUser = _exampleUsers
             .First();

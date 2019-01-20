@@ -22,7 +22,6 @@ namespace TokTok.Tests.Integration
         {
             _userRepositoryMock = new Mock<IUserRepository>();
             
-
             _exampleUsers = new List<User>
             {
                 new User {Id = 1, UserName = "user1", Password = "abcd", Token = "token1" },
@@ -30,7 +29,6 @@ namespace TokTok.Tests.Integration
                 new User {Id = 3, UserName = "user3", Token = "token3" }
             };
 
-            
         }
 
         [Fact]
@@ -120,10 +118,6 @@ namespace TokTok.Tests.Integration
                 .Setup(x => x.GetAll())
                 .Returns(_exampleUsers);
 
-            //_userRepositoryMock
-            //   .Setup(x => x.Get(It.IsAny<Func<User, bool>>()))
-            //   .Returns(testUser);
-
             _authenticationService = new AuthenticationService(_userRepositoryMock.Object);
 
             var user = new User { UserName = "user12", Password = "abffdd" };
@@ -181,7 +175,7 @@ namespace TokTok.Tests.Integration
             
             var result = _authenticationService.Login(user);
 
-            Assert.Equal(0, result.Errors.Count);
+            Assert.Empty(result.Errors);
             Assert.Equal("token1", result.Token);
 
         }
