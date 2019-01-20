@@ -21,6 +21,7 @@ namespace TokTok.Tests.Integration
         private readonly List<User> _exampleUsers;
         private readonly List<Channel> _exampleChannels;
         private readonly List<UserInChannel> _exampleUserInChannels;
+        private readonly List<Message> _exampleMessage;
 
         public ChannelUserControllerTest()
         {
@@ -49,6 +50,17 @@ namespace TokTok.Tests.Integration
             {
                 new UserInChannel {Id = 1, ChannelId = 3, UserId = 1},
                 new UserInChannel {Id = 2, ChannelId = 5, UserId = 1}
+            };
+
+            _exampleMessage = new List<Message>
+            {
+                new Message {Id = 1, ChannelId = 1, UserId = 1, Text = "message1"},
+                new Message {Id = 2, ChannelId = 1, UserId = 1, Text = "message2"},
+                new Message {Id = 3, ChannelId = 1, UserId = 1, Text = "message3"},
+                new Message {Id = 4, ChannelId = 2, UserId = 1, Text = "message4"},
+                new Message {Id = 5, ChannelId = 2, UserId = 1, Text = "message5"},
+                new Message {Id = 6, ChannelId = 2, UserId = 1, Text = "message6"},
+
             };
         }
 
@@ -133,5 +145,53 @@ namespace TokTok.Tests.Integration
             Assert.Contains(result, channel => channel.Name == "user1_ch1");
             Assert.Contains(result, channel => channel.Name == "user1_ch2");
         }
+
+        [Fact]
+        public void GetAllowedChannelsMesseges_ReturnsMessages()
+        {
+            // Arrange
+            var testUser = _exampleUsers
+                .First();
+
+            _userRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleUsers);
+
+            _userRepositoryMock
+                .Setup(x => x.Get(It.IsAny<Func<User, bool>>()))
+                .Returns(testUser);
+
+            _channelRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleChannels);
+
+            _userInChannelRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleUserInChannels);
+
+            _messageRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleMessage);
+
+            var controller = new ChannelUserController(
+                _channelRepositoryMock.Object,
+                _userInChannelRepositoryMock.Object,
+                _messageRepositoryMock.Object,
+                _userRepositoryMock.Object)
+            { ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() } };
+            controller.ControllerContext.HttpContext.Request.Headers["Authorize"] = "token1";
+
+            // Act
+            var result = controller
+                .GetAllowedChannelsMessages()
+                .Value
+                .ToList();
+
+            Assert.Equal(6, result.Count);
+            Assert.Contains(result, message => message.Text == "message1");
+  
+        }
+
+
     }
 }
