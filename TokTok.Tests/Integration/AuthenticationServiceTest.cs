@@ -42,7 +42,6 @@ namespace TokTok.Tests.Integration
                 .Setup(x => x.GetAll())
                 .Returns(_exampleUsers);
 
-
             _authenticationService = new AuthenticationService(_userRepositoryMock.Object);
 
             var user = new User { Id = 4, UserName = "user6", Password = "abcd"};
@@ -63,7 +62,6 @@ namespace TokTok.Tests.Integration
                 .Setup(x => x.GetAll())
                 .Returns(_exampleUsers);
 
-
             _authenticationService = new AuthenticationService(_userRepositoryMock.Object);
 
             var user = new User { Id = 4, UserName = "us", Password = "ab" };
@@ -73,6 +71,30 @@ namespace TokTok.Tests.Integration
             Assert.Contains(result.Errors, error => error == "Invalid username.");
             Assert.Contains(result.Errors, error => error == "Invalid password.");
             Assert.Equal(2, result.Errors.Count);
+        }
+
+        [Fact]
+        public void AuthenticationRegistration_ReturnsTwsdoErrors()
+        {
+            var testUser = _exampleUsers
+                .First();
+
+            _userRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleUsers);
+
+            _userRepositoryMock
+                .Setup(x => x.Get(It.IsAny<Func<User, bool>>()))
+                .Returns(testUser);
+
+            _authenticationService = new AuthenticationService(_userRepositoryMock.Object);
+
+            var user = new User { Id = 4, UserName = "user1", Password = "abffdd" };
+
+            var result = _authenticationService.Register(user);
+
+            Assert.Contains(result.Errors, error => error == "This username is already taken.");
+
         }
 
     }
