@@ -35,9 +35,6 @@ namespace TokTok.Tests.Integration
         [Fact]
         public void AuthenticationRegistration_ReturnsSuccessTrue()
         {
-            var testUser = _exampleUsers
-                .First();
-
             _userRepositoryMock
                 .Setup(x => x.GetAll())
                 .Returns(_exampleUsers);
@@ -55,9 +52,6 @@ namespace TokTok.Tests.Integration
         [Fact]
         public void AuthenticationRegistration_ReturnsTwoErrors()
         {
-            var testUser = _exampleUsers
-                .First();
-
             _userRepositoryMock
                 .Setup(x => x.GetAll())
                 .Returns(_exampleUsers);
@@ -74,7 +68,7 @@ namespace TokTok.Tests.Integration
         }
 
         [Fact]
-        public void AuthenticationRegistration_ReturnsTwsdoErrors()
+        public void AuthenticationRegistration_ReturnsErrorUsernameTaken()
         {
             var testUser = _exampleUsers
                 .First();
