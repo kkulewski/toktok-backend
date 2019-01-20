@@ -57,11 +57,11 @@ namespace TokTok.Tests.Integration
             _exampleMessage = new List<Message>
             {
                 new Message {Id = 1, ChannelId = 1, UserId = 1, Text = "message1"},
-                new Message {Id = 2, ChannelId = 1, UserId = 1, Text = "message2"},
+                new Message {Id = 2, ChannelId = 1, UserId = 2, Text = "message2"},
                 new Message {Id = 3, ChannelId = 1, UserId = 1, Text = "message3"},
-                new Message {Id = 4, ChannelId = 2, UserId = 1, Text = "message4"},
+                new Message {Id = 4, ChannelId = 2, UserId = 2, Text = "message4"},
                 new Message {Id = 5, ChannelId = 2, UserId = 1, Text = "message5"},
-                new Message {Id = 6, ChannelId = 2, UserId = 1, Text = "message6"},
+                new Message {Id = 6, ChannelId = 2, UserId = 1, Text = "message6"}
 
             };
         }
@@ -167,7 +167,7 @@ namespace TokTok.Tests.Integration
                 .Value
                 .ToList();
 
-            Assert.Equal(6, result.Count);
+            Assert.Equal(4, result.Count);
             Assert.Contains(result, message => message.Text == "message1");
   
         }
@@ -198,6 +198,29 @@ namespace TokTok.Tests.Integration
         }
 
         [Fact]
+        public void UsersInChannefl_ReturnsUsers()
+        {
+            // Arrange
+            setMocks();
+
+            var controller = new ChannelUserController(
+                _channelRepositoryMock.Object,
+                _userInChannelRepositoryMock.Object,
+                _messageRepositoryMock.Object,
+                _userRepositoryMock.Object)
+            { ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() } };
+            controller.ControllerContext.HttpContext.Request.Headers["Authorize"] = "token1";
+
+            // Act
+            //var result = controller.AddUserToChannel(_use)
+
+           // Assert.Equal(3, result.Count);
+
+        }
+
+
+
+        [Fact]
         public void setMocks()
         {
             var testUser = _exampleUsers
@@ -218,6 +241,10 @@ namespace TokTok.Tests.Integration
             _userInChannelRepositoryMock
                 .Setup(x => x.GetAll())
                 .Returns(_exampleUserInChannels);
+
+            _messageRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleMessage);
         }
 
     }

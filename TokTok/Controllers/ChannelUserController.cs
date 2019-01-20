@@ -60,8 +60,8 @@ namespace TokTok.Controllers
             var messages = _messageRepository.GetAll();
             var users = UserRepository.GetAll();
             var channels = GetAllowedChannelsForGivenUser(user);
-
-            var messageDtos = messages
+            var allowedMessages = messages.Where(msg => channels.Any(ch => ch.Id == msg.ChannelId));
+            var messageDtos = allowedMessages
                 .Select(msg => new MessageDto
                 {
                     Id = msg.Id,
@@ -71,7 +71,7 @@ namespace TokTok.Controllers
                     ChannelName = channels.FirstOrDefault(chn => chn.Id == msg.ChannelId)?.Name ?? "NULL"
                 })
                 .ToList();
-
+            
             return messageDtos;
         }
 
