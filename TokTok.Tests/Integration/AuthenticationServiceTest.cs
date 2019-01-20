@@ -91,5 +91,47 @@ namespace TokTok.Tests.Integration
 
         }
 
+        [Fact]
+        public void AuthenticationLogin_ReturnsErrorsInvalid()
+        { 
+            _userRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleUsers);
+
+            _authenticationService = new AuthenticationService(_userRepositoryMock.Object);
+
+            var user = new User { UserName = "ue", Password = "af" };
+
+            var result = _authenticationService.Login(user);
+
+            Assert.Contains(result.Errors, error => error == "Invalid username.");
+            Assert.Contains(result.Errors, error => error == "Invalid password.");
+
+        }
+
+        [Fact]
+        public void AuthenticationLogin_ReturnsErrorsWrongPassword()
+        {
+            var testUser = _exampleUsers
+                .First();
+
+            _userRepositoryMock
+                .Setup(x => x.GetAll())
+                .Returns(_exampleUsers);
+
+            _userRepositoryMock
+                .Setup(x => x.Get(It.IsAny<Func<User, bool>>()))
+                .Returns(testUser);
+
+            _authenticationService = new AuthenticationService(_userRepositoryMock.Object);
+
+            var user = new User {UserName = "user1", Password = "abffdd" };
+
+            var result = _authenticationService.Login(user);
+
+            Assert.Contains(result.Errors, error => error == "Incorrect password.");
+
+        }
+
     }
 }
