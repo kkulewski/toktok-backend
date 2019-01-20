@@ -51,7 +51,7 @@ namespace TokTok.Tests.Integration
         }
 
         [Fact]
-        public void AuthenticationRegistration_ReturnsTwoErrors()
+        public void AuthenticationRegistration_ReturnsInvalidFieldsValue()
         {
             _userRepositoryMock
                 .Setup(x => x.GetAll())
@@ -93,7 +93,7 @@ namespace TokTok.Tests.Integration
         }
 
         [Fact]
-        public void AuthenticationLogin_ReturnsErrorsInvalid()
+        public void AuthenticationLogin_ReturnsErrorsInvalidFieldsValue()
         { 
             _userRepositoryMock
                 .Setup(x => x.GetAll())
@@ -135,7 +135,7 @@ namespace TokTok.Tests.Integration
         }
 
         [Fact]
-        public void AuthenticationLogin_ReturnsErrorsWrongPassword()
+        public void AuthenticationLogin_ReturnsErrorWrongPassword()
         {
             var testUser = _exampleUsers
                 .First();
