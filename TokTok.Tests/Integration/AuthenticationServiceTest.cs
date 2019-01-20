@@ -192,6 +192,5 @@ namespace TokTok.Tests.Integration
             return Convert.ToBase64String(textHash);
         }
 
-
     }
 }
